@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {createAdminSession} from "@/lib/admin";
+export async function POST(req:Request){const {email,password}=await req.json();if(email!==process.env.ADMIN_EMAIL||password!==process.env.ADMIN_PASSWORD)return NextResponse.json({error:"Invalid admin credentials"},{status:401});const token=await createAdminSession();const res=NextResponse.json({ok:true});res.cookies.set("panta_admin",token,{httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"lax",path:"/",maxAge:60*60*24*7});return res}
